@@ -1,0 +1,42 @@
+#!/usr/bin/osascript
+
+# Required parameters:
+# @raycast.schemaVersion 1
+# @raycast.title Send Message
+# @raycast.mode silent
+
+# Optional parameters:
+# @raycast.icon 💬
+# @raycast.argument1 { "type": "text", "placeholder": "John Smith" }
+# @raycast.argument2 { "type": "text", "placeholder": "Enter text message" }
+
+# Documentation:
+# @raycast.description Send Person a Text Message
+# @raycast.author EJ Cochran
+
+on getPhoneNumber(target)
+    tell application "Contacts"
+        if not running
+            launch
+        end if
+        return value of phone 1 of (person 1 whose name = target)
+    end tell
+end getPhoneNumber
+
+on sendMessageToPerson(p, msg)
+    tell application "Messages"
+        if not running
+            launch
+        end if
+        send msg to participant p
+    end tell
+end sendMessageToPerson
+
+on run argv
+    set n to (item 1 of argv)
+    set msg to (item 2 of argv)
+
+    set p to getPhoneNumber(n)
+
+    sendMessageToPerson(p, msg)
+end run
